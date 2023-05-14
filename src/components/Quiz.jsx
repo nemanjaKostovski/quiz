@@ -4,26 +4,30 @@ import Question from './Question';
 const Quiz = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [answers, setAnswers] = useState([]);
-  const [currentAnswer, setCurrentAnswer] = useState(null);
+  const [answers, setAnswers] = useState(new Array(data.length).fill(null));
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const currentQuestion = data[currentQuestionIndex];
 
-  const enableNext = (e) => {
-    setCurrentAnswer(e.currentTarget.firstChild.value);
+  const currentQuestion = data[currentQuestionIndex];
+  const currentAnswer = answers[currentQuestionIndex];
+
+  const enableNext = () => {
     setIsDisabled(false);
   };
 
   const nextQuestion = () => {
-    setAnswers((prevAnswers) => [...prevAnswers, currentAnswer]);
     setCurrentQuestionIndex((prev) => prev + 1);
     setIsDisabled(true);
   };
 
   const handleSubmit = () => {
-    setAnswers((prevAnswers) => [...prevAnswers, currentAnswer]);
     setIsDisabled(true);
     setIsSubmitted(true);
+  };
+
+  const handleAnswerChange = (answer) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers[currentQuestionIndex] = answer;
+    setAnswers(updatedAnswers);
   };
 
   useEffect(() => {
@@ -34,10 +38,9 @@ const Quiz = () => {
 
   const previousQuestion = () => {
     setCurrentQuestionIndex((prev) => prev - 1);
-    setAnswers(
-      answers.filter((answer, index) => index + 1 !== currentQuestionIndex)
-    );
+    setIsDisabled(false);
   };
+
   return (
     <div>
       <h1>Quiz</h1>
@@ -47,6 +50,8 @@ const Quiz = () => {
         options={currentQuestion.options}
         id={currentQuestion.id}
         enableNext={enableNext}
+        answer={currentAnswer}
+        onAnswerChange={handleAnswerChange}
       />
       {currentQuestionIndex !== 0 && (
         <button disabled={isSubmitted} onClick={previousQuestion}>

@@ -9,6 +9,7 @@ On submit will display all the answers in the console
 Updates:
 
 1. Fixed state mutation - used filter method instead of pop.
+2. TODO - add history so that answers are remembered when switching previous-next question
 
 Installation
 To use this app, you'll need to have Node.js installed on your system.
