@@ -34,7 +34,9 @@ const Quiz = () => {
 
   const previousQuestion = () => {
     setCurrentQuestionIndex((prev) => prev - 1);
-    answers.pop();
+    setAnswers(
+      answers.filter((answer, index) => index + 1 !== currentQuestionIndex)
+    );
   };
   return (
     <div>
@@ -46,6 +48,11 @@ const Quiz = () => {
         id={currentQuestion.id}
         enableNext={enableNext}
       />
+      {currentQuestionIndex !== 0 && (
+        <button disabled={isSubmitted} onClick={previousQuestion}>
+          Previous
+        </button>
+      )}
       {currentQuestionIndex === data.length - 1 ? (
         <button disabled={isDisabled} onClick={handleSubmit}>
           Submit
@@ -53,12 +60,6 @@ const Quiz = () => {
       ) : (
         <button disabled={isDisabled} onClick={nextQuestion}>
           Next
-        </button>
-      )}
-
-      {currentQuestionIndex !== 0 && (
-        <button disabled={isSubmitted} onClick={previousQuestion}>
-          Previous
         </button>
       )}
     </div>
